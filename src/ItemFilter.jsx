@@ -37,7 +37,7 @@ class ItemFilter extends Component {
      */
     renderSelectedItems() {
      	const ret = this.props.selected_items.map(ingredient => {
-        	return <a key={ingredient} onClick={() => this.props.remove_item_cb(this.props.filterlist, this.props.item_type, {ingredient})}>{ingredient} - X</a>
+        	return <button key={ingredient} onClick={() => this.props.remove_item_cb(this.props.filterlist, this.props.item_type, {ingredient})}>{ingredient} - X</button>
         });
         return ret;
     }

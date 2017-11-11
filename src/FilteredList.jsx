@@ -10,7 +10,7 @@ class FilteredList extends Component {
 
        this.state = {
            search: "",
-           type: "any",
+           type: ["mixed-drink", "cocktail", "shot"],
            complexity: "any",
            sort_by: "alphabetical",
            selected_liquor: [],
@@ -26,9 +26,18 @@ class FilteredList extends Component {
        this.setState({search: event.target.value.trim().toLowerCase()});
    }
 
-   onTypeFilter = (event) => {
+   onTypeFilter = (type_name) => {
    		// alert("db: " + event + " " + event.id);
-   		this.setState({type: event.toLowerCase()});
+   		// Toggle the type.
+   		if (this.state.type.some(v => v === type_name.toLowerCase())) {
+   			// remove from list
+   			var my_types = this.state.type.slice().filter(v => v !== type_name.toLowerCase());
+   		} else {
+   			// add to list
+   			var my_types = this.state.type.slice().concat(type_name.toLowerCase());
+   		}
+
+   		this.setState({type: my_types});
    }
 
    onComplexityFilter = (event) => {
@@ -58,10 +67,14 @@ class FilteredList extends Component {
 
         // Checks if the current search term is contained in this item
     	should_include = item.name.toLowerCase().search(this.state.search) !== -1;
-    	// check if the current drink type is "any", or this item's type
-    	should_include &= (this.state.type === "any") || (item.type === this.state.type);
     	// Check if the current drink complexity is "any", or this item's complexity
     	should_include &= (this.state.complexity === "any") || (item.complexity == this.state.complexity);
+    	// check if the current drink type is "any", or this item's type
+    	// should_include &= (this.state.type === "any") || (item.type === this.state.type);
+    	// check if the current drink type is in list of types
+    	should_include &= this.state.type.some(v => v === item.type);
+    	// console.log(this.state.type);
+    	// console.log(this.state.type.some(v => v === item.type));
 
     	// Check if specified liquors on ingredient list
     	if (this.state.selected_liquor.length != 0) {
@@ -200,10 +213,9 @@ class FilteredList extends Component {
 	                <ItemFilter filterlist={this} item_type='misc' items={this.props.misc} selected_items={this.state.selected_misc} add_item_cb={this.add_item_cb} remove_item_cb={this.remove_item_cb} />
 
 
-	                <label><input type="radio" name="type" id="type-any" onClick={() => this.onTypeFilter("any")} defaultChecked="true"/>Any</label>
-	                <label><input type="radio" name="type" id="type-mixed" onClick={() => this.onTypeFilter("mixed-drink")}/>Mixed</label>
-	                <label><input type="radio" name="type" id="type-cocktail" onClick={() => this.onTypeFilter("cocktail")}/>Cocktail</label>
-	                <label><input type="radio" name="type" id="type-shot" onClick={() => this.onTypeFilter("shot")}/>Shot</label>
+	                <label><input type="checkbox" name="type" id="type-mixed" onClick={() => this.onTypeFilter("mixed-drink")} defaultChecked="true"/>Mixed</label>
+	                <label><input type="checkbox" name="type" id="type-cocktail" onClick={() => this.onTypeFilter("cocktail")} defaultChecked="true"/>Cocktail</label>
+	                <label><input type="checkbox" name="type" id="type-shot" onClick={() => this.onTypeFilter("shot")} defaultChecked="true"/>Shot</label>
                 </div>
 
                 <div className="recipes_div">
