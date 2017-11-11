@@ -37,7 +37,7 @@ class ItemFilter extends Component {
      */
     renderSelectedItems() {
      	const ret = this.props.selected_items.map(ingredient => {
-        	return <button key={ingredient} onClick={() => this.props.remove_item_cb(this.props.filterlist, this.props.item_type, {ingredient})}>{ingredient} - X</button>
+        	return <button className="selected_item" key={ingredient} onClick={() => this.props.remove_item_cb(this.props.filterlist, this.props.item_type, {ingredient})}>{ingredient} | X</button>
         });
         return ret;
     }
@@ -55,11 +55,12 @@ class ItemFilter extends Component {
     render() {
        return (
             <div className="itemfilter_div">
+                <h4>{this.props.item_type}:</h4>
                 <div>
-                    <select placeholder="{this.props.item_type}" id={this.props.item_type}>
+                    <select className="filter_select" placeholder="{this.props.item_type}" id={this.props.item_type}>
                     	{this.renderSelectableItems()}
                     </select>
-                    <input type="button"value="add" onClick={() => this.addSelectItem()}></input>
+                    <input className="filter_add_btn" type="button"value="add" onClick={() => this.addSelectItem()}></input>
                 </div>
 
                 {this.renderSelectedItems()}

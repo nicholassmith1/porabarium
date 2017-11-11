@@ -207,27 +207,27 @@ class FilteredList extends Component {
        return (
             <div className="content_div">
             	<div className="filter_div">
-            	<text>Filters:</text>
+            		<h3>Filters:</h3>
 	                <ItemFilter filterlist={this} item_type='liquors' items={this.props.liquors} selected_items={this.state.selected_liquor} add_item_cb={this.add_item_cb} remove_item_cb={this.remove_item_cb} />
 	                <ItemFilter filterlist={this} item_type='mixers' items={this.props.mixers} selected_items={this.state.selected_mixer} add_item_cb={this.add_item_cb} remove_item_cb={this.remove_item_cb} />
 	                <ItemFilter filterlist={this} item_type='misc' items={this.props.misc} selected_items={this.state.selected_misc} add_item_cb={this.add_item_cb} remove_item_cb={this.remove_item_cb} />
 
-
+	                <h4>Drink Type:</h4>
 	                <label><input type="checkbox" name="type" id="type-mixed" onClick={() => this.onTypeFilter("mixed-drink")} defaultChecked="true"/>Mixed</label>
 	                <label><input type="checkbox" name="type" id="type-cocktail" onClick={() => this.onTypeFilter("cocktail")} defaultChecked="true"/>Cocktail</label>
 	                <label><input type="checkbox" name="type" id="type-shot" onClick={() => this.onTypeFilter("shot")} defaultChecked="true"/>Shot</label>
                 </div>
 
                 <div className="recipes_div">
-	                <div>
+	                <div className="sort_div">
 		                <text>sort by: </text>
-		                <select onChange={this.onSortSelect}>
+		                <select className="sort_select" onChange={this.onSortSelect}>
 		                	<option value="alphabetical">Alphabetical</option>
 		                	<option value="rating">Rating</option>
 		                </select>
 	                </div>
 
-	               <input type="text" placeholder="Search" onChange={this.onSearch} />
+	               <input type="text" className="search_textbox" placeholder="Search" onChange={this.onSearch} />
 	               <List filterlist={this} items={this.props.items.filter(this.filterItem).sort(this.sortItem)} />
                </div>
 

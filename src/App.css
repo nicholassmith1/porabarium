@@ -38,23 +38,32 @@
   align-items: flex-start;
 
   width: 20%;
+  min-width: 270px;
 
+  padding-left: 10px;
   border: 1px solid black;
+
 }
 
 .recipes_div {
   display: flex;
   flex-direction: column;
-  width: 30%;
+  width: 40%;
+
+  border: 1px solid black;
 }
 
 .drinkdetails_div {
-  width: 70%;
+  width: 60%;
+  max-width: 60%;
 }
 
 .itemfilter_div {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+
+  padding-top: 5px;
 }
 
 
@@ -65,8 +74,86 @@
 }
 
 .list-container {
-  width: 30vw;
   height: 100vh;
   overflow-y: auto;
   white-space: nowrap;
+}
+
+.filter_select {
+  min-width: 190px;
+  min-height: 25px;
+}
+
+.sort_div {
+  margin: 5px;
+}
+
+.sort_select {
+  min-width: 190px;
+  min-height: 25px;
+}
+
+.search_textbox {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.filter_add_btn {
+  min-height: 25px;
+  margin-left: 5px;
+}
+
+.selected_item {
+  margin-top: 2px;
+}
+
+
+.list_preview_div {
+  display: grid;
+
+  grid-template-columns: 70px auto auto;
+  grid-template-rows: auto auto;
+
+  border: 1px solid black;
+}
+
+.img_icon {
+  width: 64px;
+  height: 64px;
+
+  grid-row-start: 1;
+  grid-row-end: 3;
+  grid-column-start: 1;
+  grid-column-end: 2;
+
+  align-self: center;
+  margin-left: 10px;
+}
+
+.list_preview_name {
+  grid-row-start: 1;
+  grid-row-end: 2;
+  grid-column-start: 2;
+  grid-column-end: 4; 
+
+  text-align: left;
+}
+
+.list_preview_complexity {
+  grid-row-start: 2;
+  grid-row-end: 3;
+  grid-column-start: 2;
+  grid-column-end: 3;
+
+  text-align: left;
+}
+
+.list_preview_rating {
+  grid-row-start: 2;
+  grid-row-end: 3;
+  grid-column-start: 3;
+  grid-column-end: 4; 
+
+  text-align: right;
+  margin-right: 20px;
 }

@@ -538,6 +538,7 @@ const misc = [
 ];
 
 class App extends Component {
+  // Shot Glass by Sharon Faria from the Noun Project
   render() {
     return (
       <div className="App">
