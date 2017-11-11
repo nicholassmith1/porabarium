@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { DropdownButton, MenuItem} from 'react-bootstrap';
 import List from './List';
+import ItemFilter from './ItemFilter';
 
 class FilteredList extends Component {
    constructor(props) {
@@ -11,7 +12,11 @@ class FilteredList extends Component {
            search: "",
            type: "any",
            complexity: "any",
-           sort_by: "alphabetical"
+           sort_by: "alphabetical",
+           selected_liquor: [],
+
+           selected_mixer: [],
+           selected_misc: []
        };
    }
 
@@ -43,8 +48,22 @@ class FilteredList extends Component {
     	should_include &= (this.state.type === "any") || (item.type === this.state.type);
     	// Check if the current drink complexity is "any", or this item's complexity
     	should_include &= (this.state.complexity === "any") || (item.complexity == this.state.complexity);
+    	// Check if specified liquors on ingredient list
+    	// should_include &= (item.ingredients.)
+    	if (this.state.selected_liquor.length != 0) {
+    		var ingredient_arr = item.ingredients.map(item => {
+    			return item.i.toLowerCase();
+    		});
+    		should_include &= this.state.selected_liquor.every(v => ingredient_arr.indexOf(v) >= 0);
+    		// console.log(ingredient_arr);
+    		// console.log("TEST " + ingredient_arr.some(v => this.state.selected_liquor.indexOf(v) >= 0));
+    	}
 
     	return should_include;
+    }
+
+    sortAlphabetical = (a, b) => {
+    	return a.toLowerCase().localeCompare(b.toLowerCase());
     }
 
     sortItem = (a, b) => {
@@ -59,10 +78,132 @@ class FilteredList extends Component {
     	}
     }
 
+    removeSelectLiquor(e1) {
+    	console.log(e1.ingredient);
+    	var my_selected_liquor = this.state.selected_liquor.filter(function(item) { 
+    		return item !== e1.ingredient;
+		});
+    	// console.log(my_selected_liquor);
+    	this.setState({selected_liquor: my_selected_liquor});
+    }
+
+    renderSelectableLiquors() {
+    	/* This is all just to generate a unique list of ingredients */
+    	// var my_set = new Set([]);
+    	// var str = "";
+    	// var i;
+    	// var j;
+
+    	// for (i = 0; i < this.props.items.length; i++) {
+    	// 	for (j = 0; j < this.props.items[i].ingredients.length; j++) {
+    	// 		my_set.add(this.props.items[i].ingredients[j].i.toLowerCase());
+    	// 	}
+    	// }
+    	// for (let ing of my_set.values()) {
+    	// 	str += "\"" +  ing + "\", ";
+    	// }
+    	// console.log(str);
+
+    	// const items = this.props.ingredients.map(ingredient => {
+     //    	return <option key={ingredient}>{ingredient}</option>
+     //    });
+
+     	/* Show all available */
+     	const my_selected_liquor = this.state.selected_liquor;
+     	const items = this.props.liquors.filter(function( el ) {
+  			return my_selected_liquor.indexOf( el ) < 0;
+		}).sort(this.sortAlphabetical).map(ingredient => {
+        	return <option key={ingredient}>{ingredient}</option>
+        });
+        return items;
+    }
+
+    renderSelectedLiquor() {
+     	const items = this.state.selected_liquor.map(ingredient => {
+        	return <a key={ingredient} onClick={() => this.removeSelectLiquor({ingredient})}>{ingredient}</a>
+        });
+      	// const items = this.state.selected_liquor.map(ingredient => {
+       //  	return <a key={ingredient} onClick={() => console.log({ingredient})}>{ingredient}</a>
+       //  });
+        return items;
+    }
+
+    /* Add the item selected in 'select_liquor' */
+    addSelectLiquor() {
+    	var e = document.getElementById("select_liquor");
+		var ingredient = e.options[e.selectedIndex].value;
+		// console.log("stuff " + ingredient);
+		// TODO - ensure that this is a copy operation...
+		this.setState({selected_liquor: this.state.selected_liquor.slice().concat(ingredient)});
+    }
+
+    /*
+     * Adds the specified 'val' into the 'selected_xxxx' state. Because
+     * this callback is called by ItemFilter items, 'filterlist' will
+     * be passed in to be used instead of 'this'
+     */
+    add_item_cb(filterlist, type, val) {
+    	// console.log(type + ", " + val);
+    	// console.log(filterlist);
+    	switch (type) {
+    		case 'liquors':
+    			filterlist.setState({selected_liquor: filterlist.state.selected_liquor.slice().concat(val)});
+    			break;
+    		case 'mixers':
+    			filterlist.setState({selected_mixer: filterlist.state.selected_mixer.slice().concat(val)});
+    			break;
+    		case 'misc':
+    			filterlist.setState({selected_misc: filterlist.state.selected_misc.slice().concat(val)});
+    			break;
+    	}
+    }
+
+    /*
+     * Removes the specified 'val' from the 'selected_xxxx' state. Because
+     * this callback is called by ItemFilter items, 'filterlist' will
+     * be passed in to be used instead of 'this'
+     */
+    remove_item_cb(filterlist, type, val) {
+    	// console.log(type + ", " + val + ", " + val.ingredient);
+    	// console.log(filterlist);
+    	var vali = val.ingredient;
+    	switch (type) {
+    		case 'liquors':
+    			var my_selected_liquor = filterlist.state.selected_liquor.slice().filter(function(item) { 
+    				return item !== vali;
+				});
+    			filterlist.setState({selected_liquor: my_selected_liquor});
+    			break;
+    		case 'mixers':
+    			var my_selected_mixer = filterlist.state.selected_mixer.slice().filter(function(item) { 
+    				return item !== vali;
+				});
+    			filterlist.setState({selected_mixer: my_selected_mixer});
+    			break;
+    		case 'misc':
+    			var my_selected_misc = filterlist.state.selected_misc.slice().filter(function(item) { 
+    				return item !== vali;
+				});
+    			filterlist.setState({selected_misc: my_selected_misc});
+    			break;
+    	}
+    }
+
     render() {
        return (
             <div className="filter-list">
                 <h1>Produce Search</h1>
+
+                <select placeholder="Ingredient" id="select_liquor">
+                	{this.renderSelectableLiquors()}
+                </select>
+                <input type="button"value="add" onClick={() => this.addSelectLiquor()}></input>
+
+                {this.renderSelectedLiquor()}
+
+                <ItemFilter filterlist={this} item_type='liquors' items={this.props.liquors} selected_items={this.state.selected_liquor} add_item_cb={this.add_item_cb} remove_item_cb={this.remove_item_cb} />
+                <ItemFilter filterlist={this} item_type='mixers' items={this.props.mixers} selected_items={this.state.selected_mixer} add_item_cb={this.add_item_cb} remove_item_cb={this.remove_item_cb} />
+                <ItemFilter filterlist={this} item_type='misc' items={this.props.misc} selected_items={this.state.selected_misc} add_item_cb={this.add_item_cb} remove_item_cb={this.remove_item_cb} />
 
                 <select onChange={this.onSortSelect}>
                 	<option value="alphabetical">Alphabetical</option>
