@@ -32,7 +32,9 @@ class DrinkDetails extends Component {
 	    		<h1>{this.props.item.name}</h1>
 	    		<h1>Ingredients</h1>
 	    			<table>
+	    				<tbody>
 	    				{this.renderIngredients()}
+	    				</tbody>
 	    			</table>
 	    		<h1>Instructions</h1>
 	    		{this.props.item.instructions}
