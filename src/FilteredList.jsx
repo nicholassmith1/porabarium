@@ -2,21 +2,22 @@ import React, { Component } from 'react';
 import { DropdownButton, MenuItem} from 'react-bootstrap';
 import List from './List';
 import ItemFilter from './ItemFilter';
+import DrinkDetails from './DrinkDetails';
 
 class FilteredList extends Component {
    constructor(props) {
        super(props);
 
-        // TODO: Add a new key/value pair in the state to keep track of type
        this.state = {
            search: "",
            type: "any",
            complexity: "any",
            sort_by: "alphabetical",
            selected_liquor: [],
-
            selected_mixer: [],
-           selected_misc: []
+           selected_misc: [],
+
+           show_recipe: ""
        };
    }
 
@@ -37,6 +38,19 @@ class FilteredList extends Component {
 
 	onSortSelect = (event) => {
 		this.setState({sort_by: event.target.value.trim().toLowerCase()});
+	}
+
+	onShowRecipe = (item) => {
+		// // console.log(item);
+		// var my_show_recipe = this.props.items.filter(this.filterItem).filter(el => el.name.trim().toLowerCase() === item.trim().toLowerCase());
+		// // console.log(my_show_recipe);
+
+		// if (my_show_recipe.length != 1)
+		// 	my_show_recipe = null;
+		// else
+		// 	my_show_recipe = my_show_recipe[0];
+		// this.setState({show_recipe: my_show_recipe});
+		this.setState({show_recipe: item.trim().toLowerCase()});
 	}
 
     filterItem = (item) => {
@@ -162,35 +176,50 @@ class FilteredList extends Component {
     	}
     }
 
+    /* Returns null if the specified drink name doesn't exist in *filtered* list, or object with recipe details*/
+    getDrinkDetails(name) {
+    	console.log("test");
+    	console.log(name);
+		var my_show_recipe = this.props.items.filter(this.filterItem).filter(el => el.name.trim().toLowerCase() === name.trim().toLowerCase());
+		// console.log(my_show_recipe);
+
+		if (my_show_recipe.length != 1)
+			my_show_recipe = null;
+		else
+			my_show_recipe = my_show_recipe[0];
+		return my_show_recipe;
+    }
+
     render() {
        return (
-            <div className="filter-list">
-                <h1>Produce Search</h1>
+            <div className="content_div">
+            	<div className="filter_div">
+            	<text>Filters:</text>
+	                <ItemFilter filterlist={this} item_type='liquors' items={this.props.liquors} selected_items={this.state.selected_liquor} add_item_cb={this.add_item_cb} remove_item_cb={this.remove_item_cb} />
+	                <ItemFilter filterlist={this} item_type='mixers' items={this.props.mixers} selected_items={this.state.selected_mixer} add_item_cb={this.add_item_cb} remove_item_cb={this.remove_item_cb} />
+	                <ItemFilter filterlist={this} item_type='misc' items={this.props.misc} selected_items={this.state.selected_misc} add_item_cb={this.add_item_cb} remove_item_cb={this.remove_item_cb} />
 
 
-                <ItemFilter filterlist={this} item_type='liquors' items={this.props.liquors} selected_items={this.state.selected_liquor} add_item_cb={this.add_item_cb} remove_item_cb={this.remove_item_cb} />
-                <ItemFilter filterlist={this} item_type='mixers' items={this.props.mixers} selected_items={this.state.selected_mixer} add_item_cb={this.add_item_cb} remove_item_cb={this.remove_item_cb} />
-                <ItemFilter filterlist={this} item_type='misc' items={this.props.misc} selected_items={this.state.selected_misc} add_item_cb={this.add_item_cb} remove_item_cb={this.remove_item_cb} />
+	                <label><input type="radio" name="type" id="type-any" onClick={() => this.onTypeFilter("any")} defaultChecked="true"/>Any</label>
+	                <label><input type="radio" name="type" id="type-mixed" onClick={() => this.onTypeFilter("mixed-drink")}/>Mixed</label>
+	                <label><input type="radio" name="type" id="type-cocktail" onClick={() => this.onTypeFilter("cocktail")}/>Cocktail</label>
+	                <label><input type="radio" name="type" id="type-shot" onClick={() => this.onTypeFilter("shot")}/>Shot</label>
+                </div>
 
-                <select onChange={this.onSortSelect}>
-                	<option value="alphabetical">Alphabetical</option>
-                	<option value="rating">Rating</option>
-                </select>
+                <div className="recipes_div">
+	                <div>
+		                <text>sort by: </text>
+		                <select onChange={this.onSortSelect}>
+		                	<option value="alphabetical">Alphabetical</option>
+		                	<option value="rating">Rating</option>
+		                </select>
+	                </div>
 
-               	<label><input type="radio" name="complexity" id="complexity-any" onClick={() => this.onComplexityFilter("any")} defaultChecked="true"/>Any</label>
-                <label><input type="radio" name="complexity" id="complexity-easy" onClick={() => this.onComplexityFilter("easy")}/>Easy</label>
-                <label><input type="radio" name="complexity" id="complexity-medium" onClick={() => this.onComplexityFilter("medium")}/>Medium</label>
-                <label><input type="radio" name="complexity" id="complexity-hard" onClick={() => this.onComplexityFilter("hard")}/>Hard</label>
+	               <input type="text" placeholder="Search" onChange={this.onSearch} />
+	               <List filterlist={this} items={this.props.items.filter(this.filterItem).sort(this.sortItem)} />
+               </div>
 
-
-                <label><input type="radio" name="type" id="type-any" onClick={() => this.onTypeFilter("any")} defaultChecked="true"/>Any</label>
-                <label><input type="radio" name="type" id="type-mixed" onClick={() => this.onTypeFilter("mixed-drink")}/>Mixed</label>
-                <label><input type="radio" name="type" id="type-cocktail" onClick={() => this.onTypeFilter("cocktail")}/>Cocktail</label>
-                <label><input type="radio" name="type" id="type-shot" onClick={() => this.onTypeFilter("shot")}/>Shot</label>
-
-
-               <input type="text" placeholder="Search" onChange={this.onSearch} />
-               <List items={this.props.items.filter(this.filterItem).sort(this.sortItem)} />
+               <DrinkDetails item={this.getDrinkDetails(this.state.show_recipe)} />
            </div>
        );
    }

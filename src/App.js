@@ -537,10 +537,6 @@ const misc = [
     "lime twist"
 ];
 
-const ingredients = [
-  "angostura bitters", "sugar", "orange wheel", "maraschino cherry", "club soda", "bourbon", "old tom gin", "sweet vermouth", "luxardo maraschino liqueur", "itailian sweet vermouth", "bitters", "dark rum", "fresh lime juice", "simple syrup", "kosher salt", "wedge lime", "superfine suger", "cointreau", "tequila", "ice cubes", "lemon wedge", "cognac", "lemon juice", "ice", "london dry gin", "champagne", "lemon twist", "worcestershire sauce", "lenon juice", "horseradish", "hot sauce", "celery seed", "coriander", "black pepper", "salt", "tomato juice", "vodka", "bacon salt", "lime wedge", "irish whiskey", "coffee", "whipped cream", "applejack", "grenadine", "apple", "campari", "peychaud's bitters", "rye whiskey", "absinthe", "star anise", "gin", "half-and-half", "egg white", "vanilla extract", "orange flower water", "lemon-lime soda", "orange wedge", "mint sprig", "raw sugar", "mint leaves", "orange", "marashino cherry", "silver rum", "lime juice", "aged rum", "triple sec", "orgeat syrup", "mint", "superfine sugar", "rum", "lemon", "pineapple", "citrus vodka", "cranberry juice", "chartreuse liqueur", "maraschino", "lime twist", "whiskey", "orange juice", "coffee liqueur", "sambucca", "orange liqueur", "peach liqueur", "almond liqueur", "melon liqueur", "pineapple juice", "blueberry schnapps", "sweet and sour mix", "buttershot liqueur", "irish cream", "buttershot schnapps", "spiced rum", "coca-cola", "tonic water", "jagermeister", "peppermint schnapps", "cinnamon schnapps", "coconut rum"
-];
-
 class App extends Component {
   render() {
     return (
@@ -549,10 +545,6 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        test
         <FilteredList items={recipes} liquors={liquors} mixers={mixers} misc={misc} />
       </div>
     );

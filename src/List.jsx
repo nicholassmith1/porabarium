@@ -17,20 +17,15 @@ class List extends Component {
     };
   }
 
-  onPreviewClick = (item) => {
-    console.log(item.trim().toLowerCase());
-    this.setState({show_item: item.trim().toLowerCase()});
-  }
+  // onPreviewClick = (item) => {
+  //   console.log(item.trim().toLowerCase());
+
+  //   this.setState({show_item: item.trim().toLowerCase()});
+  // }
 
   renderList() {
-       /*
-          Javascript map will let you iterate and modify each item in a list.
-          In this example, we are changing each item
-          (ex. {name: "Apple", type: "Fruit"}) into a HTML list element.
-       */
-       //alert(this.props.items)
        const items = this.props.items.map(item => {
-           return <div key={item.name} className={"list-preview"} onClick={() => this.onPreviewClick(item.name)}>
+           return <div key={item.name} className={"list-preview"} onClick={() => this.props.filterlist.onShowRecipe(item.name)}>
                 {item.type}
                 <h2>{item.name}</h2>
                 complexity: {item.complexity}
@@ -41,6 +36,20 @@ class List extends Component {
     return items;
   }
 
+  // renderList() {
+  //      const items = this.props.items.map(item => {
+  //          return <div key={item.name} className={"list-preview"} onClick={() => this.onPreviewClick(item.name)}>
+  //               {item.type}
+  //               <h2>{item.name}</h2>
+  //               complexity: {item.complexity}
+  //               rating: {item.rating}
+  //           </div>
+  //      });
+
+  //   return items;
+  // }
+
+  /*
   render() {
     var idx = this.props.items.findIndex(i => i.name.toLowerCase() === this.state.show_item.toLowerCase())
     console.log("index " + idx + " " + this.state.show_item);
@@ -48,6 +57,7 @@ class List extends Component {
     if (idx >= 0) {
       return (
           <div>
+            <this.renderList()}
             <div className={"list-container"}>
               {this.renderList()}
             </div>
@@ -64,6 +74,15 @@ class List extends Component {
           </div>
          );
       }
+    }
+    */
+
+    render() {
+      return (
+          <div className="list-container">
+            {this.renderList()}
+          </div>
+         );
     }
 }
 

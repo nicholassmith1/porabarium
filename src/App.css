@@ -27,6 +27,34 @@
   to { transform: rotate(360deg); }
 }
 
+.content_div {
+  display: flex;
+  flex-direction: row;
+}
+
+.filter_div {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+
+  width: 30%;
+}
+
+.recipes_div {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+}
+
+.drinkdetails_div {
+  width: 60%;
+}
+
+.itemfilter_div {
+  display: flex;
+  flex-direction: column;
+}
+
 
 .list-preview {
   display: flex;

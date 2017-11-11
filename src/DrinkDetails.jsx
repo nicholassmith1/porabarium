@@ -25,9 +25,14 @@ class DrinkDetails extends Component {
 
 	render() {
 		//console.log("db " + this.props.item.name)
+		if (this.props.item == null) {
+			return (
+				<div className="drinkdetails_div"></div>
+			);
+		}
 
     	return (
-    		<div>
+    		<div className="drinkdetails_div">
 	    		<img src="fixme" />
 	    		<h1>{this.props.item.name}</h1>
 	    		<h1>Ingredients</h1>
