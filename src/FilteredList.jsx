@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { DropdownButton, MenuItem} from 'react-bootstrap';
 import List from './List';
 import ItemFilter from './ItemFilter';
 import DrinkDetails from './DrinkDetails';
@@ -27,17 +26,20 @@ class FilteredList extends Component {
    }
 
    onTypeFilter = (type_name) => {
+   		var my_types;
    		// alert("db: " + event + " " + event.id);
    		// Toggle the type.
    		if (this.state.type.some(v => v === type_name.toLowerCase())) {
    			// remove from list
-   			var my_types = this.state.type.slice().filter(v => v !== type_name.toLowerCase());
+   			my_types = this.state.type.slice().filter(v => v !== type_name.toLowerCase());
    		} else {
    			// add to list
-   			var my_types = this.state.type.slice().concat(type_name.toLowerCase());
+   			my_types = this.state.type.slice().concat(type_name.toLowerCase());
    		}
 
    		this.setState({type: my_types});
+   		// If we ever can't see the selected recipe anymore, remove the show_recipe property
+		this.setState({show_recipe: ""});
    }
 
    onComplexityFilter = (event) => {
@@ -50,7 +52,7 @@ class FilteredList extends Component {
 	}
 
 	onShowRecipe = (item) => {
-		// // console.log(item);
+		console.log(item);
 		// var my_show_recipe = this.props.items.filter(this.filterItem).filter(el => el.name.trim().toLowerCase() === item.trim().toLowerCase());
 		// // console.log(my_show_recipe);
 
@@ -64,11 +66,12 @@ class FilteredList extends Component {
 
     filterItem = (item) => {
    		var should_include;
+   		var ingredient_arr;
 
         // Checks if the current search term is contained in this item
     	should_include = item.name.toLowerCase().search(this.state.search) !== -1;
     	// Check if the current drink complexity is "any", or this item's complexity
-    	should_include &= (this.state.complexity === "any") || (item.complexity == this.state.complexity);
+    	should_include &= (this.state.complexity === "any") || (item.complexity === this.state.complexity);
     	// check if the current drink type is "any", or this item's type
     	// should_include &= (this.state.type === "any") || (item.type === this.state.type);
     	// check if the current drink type is in list of types
@@ -77,22 +80,22 @@ class FilteredList extends Component {
     	// console.log(this.state.type.some(v => v === item.type));
 
     	// Check if specified liquors on ingredient list
-    	if (this.state.selected_liquor.length != 0) {
-    		var ingredient_arr = item.ingredients.map(item => {
+    	if (this.state.selected_liquor.length !== 0) {
+    		ingredient_arr = item.ingredients.map(item => {
     			return item.i.toLowerCase();
     		});
     		should_include &= this.state.selected_liquor.every(v => ingredient_arr.indexOf(v) >= 0);
     	}
     	// Check if specified mixers on ingredient list
-    	if (this.state.selected_mixer.length != 0) {
-    		var ingredient_arr = item.ingredients.map(item => {
+    	if (this.state.selected_mixer.length !== 0) {
+    		ingredient_arr = item.ingredients.map(item => {
     			return item.i.toLowerCase();
     		});
     		should_include &= this.state.selected_mixer.every(v => ingredient_arr.indexOf(v) >= 0);
     	}
     	// Chick if specified misc on ingredient list
-    	if (this.state.selected_misc.length != 0) {
-    		var ingredient_arr = item.ingredients.map(item => {
+    	if (this.state.selected_misc.length !== 0) {
+    		ingredient_arr = item.ingredients.map(item => {
     			return item.i.toLowerCase();
     		});
     		should_include &= this.state.selected_misc.every(v => ingredient_arr.indexOf(v) >= 0);
@@ -110,10 +113,14 @@ class FilteredList extends Component {
     	switch (this.state.sort_by) {
     		case "rating":
     			// Sort descending rating
-    			return a.rating == b.rating ? 0 : a.rating > b.rating ? -1 : 1;
+    			return a.rating === b.rating ? 0 : a.rating > b.rating ? -1 : 1;
     		default:
     		case "alphabetical":
     			return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+    		case "num_ing_desc":
+    			return (a.ingredients.length === b.ingredients.length) ? 0 : (a.ingredients.length > b.ingredients.length) ? -1 : 1;
+    		case "num_ing_ascend":
+    			return (a.ingredients.length === b.ingredients.length) ? 0 : (a.ingredients.length > b.ingredients.length) ? 1 : -1;
     	}
     }
 
@@ -155,7 +162,11 @@ class FilteredList extends Component {
     		case 'misc':
     			filterlist.setState({selected_misc: filterlist.state.selected_misc.slice().concat(val)});
     			break;
+    		default:
+    			break;
     	}
+    	// If we ever can't see the selected recipe anymore, remove the show_recipe property
+		filterlist.setState({show_recipe: ""});
     }
 
     /*
@@ -186,20 +197,27 @@ class FilteredList extends Component {
 				});
     			filterlist.setState({selected_misc: my_selected_misc});
     			break;
+    		default:
+    			break;
     	}
+    	// If we ever can't see the selected recipe anymore, remove the show_recipe property
+		filterlist.setState({show_recipe: ""});
     }
 
     /* Returns null if the specified drink name doesn't exist in *filtered* list, or object with recipe details*/
     getDrinkDetails(name) {
-    	console.log("test");
-    	console.log(name);
+    	// console.log("test");
+    	console.log("get drink details " + name);
 		var my_show_recipe = this.props.items.filter(this.filterItem).filter(el => el.name.trim().toLowerCase() === name.trim().toLowerCase());
+
+		console.log("get drink details " + my_show_recipe);
 		// console.log(my_show_recipe);
 
-		if (my_show_recipe.length != 1)
+		if (my_show_recipe.length !== 1) {
 			my_show_recipe = null;
-		else
+		} else {
 			my_show_recipe = my_show_recipe[0];
+		}
 		return my_show_recipe;
     }
 
@@ -219,16 +237,21 @@ class FilteredList extends Component {
                 </div>
 
                 <div className="recipes_div">
-	                <div className="sort_div">
-		                <text>sort by: </text>
-		                <select className="sort_select" onChange={this.onSortSelect}>
-		                	<option value="alphabetical">Alphabetical</option>
-		                	<option value="rating">Rating</option>
-		                </select>
-	                </div>
+                	<div className="itemfilter_filter_search_div">
+		                <div className="sort_div">
+			                <font>sort by: </font>
+			                <select className="sort_select" onChange={this.onSortSelect}>
+			                	<option value="alphabetical">Alphabetical</option>
+			                	<option value="rating">Rating</option>
+			                	<option value="num_ing_desc">Number of Ingredients, More to Less</option>
+			                	<option value="num_ing_ascend">Number of Ingredients, Less to More</option>
+			                	
+			                </select>
+		                </div>
 
-	               <input type="text" className="search_textbox" placeholder="Search" onChange={this.onSearch} />
-	               <List filterlist={this} items={this.props.items.filter(this.filterItem).sort(this.sortItem)} />
+		               <input type="text" className="search_textbox" placeholder="Search" onChange={this.onSearch} />
+		            </div>
+	               <List filterlist={this} items={this.props.items.filter(this.filterItem).sort(this.sortItem)} show_item={this.state.show_recipe} />
                </div>
 
                <DrinkDetails item={this.getDrinkDetails(this.state.show_recipe)} />

@@ -13,10 +13,6 @@ import React, { Component } from 'react';
  * -remove_item_cb:  (filterlist, item_type, itme) -> adds 'item' to 'selected_items' in filterlist
  */
 class ItemFilter extends Component {
-	constructor(props) {
-    	super(props);
-	}
-
 	/* 
 	 * Create select options for all in items that not also in
 	 * selected_items
@@ -37,7 +33,7 @@ class ItemFilter extends Component {
      */
     renderSelectedItems() {
      	const ret = this.props.selected_items.map(ingredient => {
-        	return <button className="selected_item" key={ingredient} onClick={() => this.props.remove_item_cb(this.props.filterlist, this.props.item_type, {ingredient})}>{ingredient} | X</button>
+        	return <button className="selected_item" key={ingredient} onClick={() => this.props.remove_item_cb(this.props.filterlist, this.props.item_type, {ingredient})}>{ingredient} <b>X</b></button>
         });
         return ret;
     }
@@ -56,7 +52,7 @@ class ItemFilter extends Component {
        return (
             <div className="itemfilter_div">
                 <h4>{this.props.item_type}:</h4>
-                <div>
+                <div className="itemfilter_filter_add_div">
                     <select className="filter_select" placeholder="{this.props.item_type}" id={this.props.item_type}>
                     	{this.renderSelectableItems()}
                     </select>

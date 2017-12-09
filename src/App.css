@@ -1,16 +1,43 @@
+
+body {
+  color: black;
+  background-color: white;
+  font-size: 1vw;
+
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+h1 {
+  font-size: 3vw;
+}
+
+h2 {
+  font-size: 2vw;
+}
+
+h3 {
+  font-size: 1.6vw;
+}
+
+h4 {
+  font-size: 1.2vw;
+}
+
 .App {
   text-align: center;
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+  width: 95vw;
+  height: 14vh;
 }
 
 .App-header {
+  display: flex;
+  align-items: center;
   background-color: #222;
-  height: 150px;
-  padding: 20px;
+  height: 16vh;
+  padding: 0px;
   color: white;
 }
 
@@ -37,25 +64,45 @@
   flex-direction: column;
   align-items: flex-start;
 
-  width: 20%;
-  min-width: 270px;
+  width: 22vw;
 
-  padding-left: 10px;
-  border: 1px solid black;
+  height: 84vh;
 
+  padding-left: 1vw;
+  border-right: 1px solid black;
+}
+
+.itemfilter_filter_search_div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding-bottom: 10px;
+
+  border-bottom: 1px solid black;
+
+  height: 85px;
 }
 
 .recipes_div {
   display: flex;
   flex-direction: column;
-  width: 40%;
-
-  border: 1px solid black;
+  width: 40vw;
 }
 
 .drinkdetails_div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  height: 84vh;
   width: 60%;
   max-width: 60%;
+
+  overflow: -moz-scrollbars-vertical; 
+  overflow-y: auto;
+
+  border-left: 1px solid black;
 }
 
 .itemfilter_div {
@@ -74,14 +121,28 @@
 }
 
 .list-container {
-  height: 100vh;
+  height: calc(84vh - 85px);
+
+  overflow: -moz-scrollbars-vertical; 
   overflow-y: auto;
   white-space: nowrap;
 }
 
+.itemfilter_filter_add_div {
+  display: flex;
+  flex-direction: row;
+
+  align-items: stretch;
+}
+
 .filter_select {
-  min-width: 190px;
-  min-height: 25px;
+  width: 11.5vw;
+  min-height: 12px;
+}
+
+.filter_add_btn {
+  width: 3.5vw;
+  min-height: 12px;
 }
 
 .sort_div {
@@ -89,37 +150,49 @@
 }
 
 .sort_select {
-  min-width: 190px;
+  width: 20vw;
   min-height: 25px;
 }
 
 .search_textbox {
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
-.filter_add_btn {
-  min-height: 25px;
-  margin-left: 5px;
+  width: 32vw;
 }
 
 .selected_item {
   margin-top: 2px;
+  padding: 2px;
+  background: #E6C277;
+  color: white;
+  border-radius: 0.25vw;
+
+  vertical-align: middle;
+  background-image: linear-gradient(to bottom, #E6C277, #53a853);
+
+}
+
+@media screen and (max-width: 900px) {
+  .itemfilter_filter_search_div {
+      height: 55px !important;
+    }
+
+  .list-container {
+    height: calc(84vh - 55px) !important;
+  }
 }
 
 
 .list_preview_div {
   display: grid;
 
-  grid-template-columns: 70px auto auto;
+  grid-template-columns: 8vw auto auto;
   grid-template-rows: auto auto;
 
-  border: 1px solid black;
+  border-bottom: 1px solid black;
 }
 
 .img_icon {
-  width: 64px;
-  height: 64px;
+  width: 5vw;
+  height: 5vw;
 
   grid-row-start: 1;
   grid-row-end: 3;
@@ -157,3 +230,29 @@
   text-align: right;
   margin-right: 20px;
 }
+
+.drinkdetails_img {
+  max-width: 45vw;
+  max-height: 45vw;
+}
+
+.drinkdetails_td_amount {
+  text-align: left;
+}
+
+.drinkdetails_td_ingredient {
+  text-align: left;
+  padding-left: 10px;
+}
+
+#list_selected {
+  background: #53a853;
+  color: white;
+}
+
+
+
+
+
+
+

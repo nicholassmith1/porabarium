@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import DrinkDetails from './DrinkDetails';
 
 /*
  The list component will take the list of items passed in as a property
@@ -23,23 +22,54 @@ class List extends Component {
   //   this.setState({show_item: item.trim().toLowerCase()});
   // }
 
-  renderDrinkType(type_name) {
-    switch(type_name) {
-      case "mixed-drink":
-        return (<img className="img_icon" src={require("./images/mixed_glass.png")} alt="mixed_icon"/>);
-      case "cocktail":
-        return (<img className="img_icon" src={require("./images/cocktail_glass.ico")} alt="cocktail_icon"/>);
-      case "shot":
-        return (<img className="img_icon" src={require("./images/shot_glass.png")} alt="shot_icon"/>);
-      default:
-         return (<div></div>);
+  renderTest(name) {
+    console.log(name + " " + this.props.show_item);
+    if (name === this.props.show_item) {
+      return (<span>*****</span>);
+    } else {
+      return (<div></div>);
     }
+
+  }
+
+
+  renderDrinkType(name, type_name) {
+    if (name.trim().toLowerCase() === this.props.show_item.trim().toLowerCase()) {
+      switch(type_name) {
+        case "mixed-drink":
+          return (<img className="img_icon" src={require("./images/mixed_glass_white.png")} alt="mixed_icon"/>);
+        case "cocktail":
+          return (<img className="img_icon" src={require("./images/cocktail_glass_white.png")} alt="cocktail_icon"/>);
+        case "shot":
+          return (<img className="img_icon" src={require("./images/shot_glass_white.png")} alt="shot_icon"/>);
+        default:
+           return (<div></div>);
+      }
+    } else {
+      switch(type_name) {
+        case "mixed-drink":
+          return (<img className="img_icon" src={require("./images/mixed_glass.png")} alt="mixed_icon"/>);
+        case "cocktail":
+          return (<img className="img_icon" src={require("./images/cocktail_glass.png")} alt="cocktail_icon"/>);
+        case "shot":
+          return (<img className="img_icon" src={require("./images/shot_glass.png")} alt="shot_icon"/>);
+        default:
+           return (<div></div>);
+      }
+    }
+
   }
 
   renderList() {
-       const items = this.props.items.map(item => {
-           return <div key={item.name} className={"list_preview_div"} onClick={() => this.props.filterlist.onShowRecipe(item.name)}>
-                {this.renderDrinkType(item.type.toLowerCase())}
+
+    const items = this.props.items.map(item => {
+      var id = "unselected";
+      if (item.name.trim().toLowerCase() === this.props.show_item.trim().toLowerCase()) {
+        id = "list_selected";
+      }
+      // console.log(item.name + " " + this.props.show_item);
+           return <div key={item.name} className={"list_preview_div"} id={id} onClick={() => this.props.filterlist.onShowRecipe(item.name)}>
+                {this.renderDrinkType(item.name, item.type.toLowerCase())}
                 <h2 className="list_preview_name">{item.name}</h2>
                 <p className="list_preview_complexity">complexity: {item.complexity}</p>
                 <p className="list_preview_rating">rating: {item.rating}</p>

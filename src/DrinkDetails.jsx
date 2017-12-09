@@ -9,32 +9,42 @@ import React, { Component } from 'react';
 
 */
 class DrinkDetails extends Component {
-	constructor(props) {
-    	super(props);
-	}
 
 	renderIngredients() {
 		const items = this.props.item.ingredients.map(item => {
-        	return <tr>
-           		<td>{item.a}</td><td>{item.i}</td>
+        	return <tr key={item.i}>
+           		<td className="drinkdetails_td_amount">{item.a}</td><td className="drinkdetails_td_ingredient">{item.i}</td>
            	</tr>
     	});
 
     	return items;
 	}
 
+	renderInstructions() {
+		var ret = this.props.item.instructions.split('\n').map((item) => {
+				  return <p>{item}</p>
+		});
+
+		console.log(ret);
+
+		return ret;
+	}
+
 	render() {
 		//console.log("db " + this.props.item.name)
 		if (this.props.item == null) {
 			return (
-				<div className="drinkdetails_div"></div>
+				<div className="drinkdetails_div">
+					<img className="drinkdetails_img" src={require("./images/wine.png")} alt="wine.png" />
+				</div>
 			);
 		}
 
+		const image_path = this.props.item.image;
     	return (
     		<div className="drinkdetails_div">
-	    		<img src="fixme" />
-	    		<h1>{this.props.item.name}</h1>
+    			<h1>{this.props.item.name}</h1>
+	    		<img className="drinkdetails_img" src={require(`${image_path}`)} alt={this.props.item.image} />
 	    		<h1>Ingredients</h1>
 	    			<table>
 	    				<tbody>
@@ -42,7 +52,8 @@ class DrinkDetails extends Component {
 	    				</tbody>
 	    			</table>
 	    		<h1>Instructions</h1>
-	    		{this.props.item.instructions}
+
+				{this.renderInstructions()}
         	</div>
        );
    }
